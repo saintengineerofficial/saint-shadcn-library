@@ -8,10 +8,10 @@ import { twMerge } from 'tailwind-merge';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 type ImageProps = React.ComponentProps<typeof Image>;
-export interface LazyImageProps extends ImageProps {
+export interface LazyImageProps extends Omit<ImageProps, 'loading'> {
   src: string;
   alt: string;
-  loading?: 'lazy' | 'eager';
+  loading?: string;
   lazy?: boolean;
   className?: string;
 }
