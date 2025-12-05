@@ -1,14 +1,12 @@
 'use client'
 import React from 'react'
 
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
 import { twMerge } from 'tailwind-merge'
 
-import BackgroundSectionAsync from '@/app/components/global/BackgroundSectionAsync'
-import { Button, ButtonProps } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import BackgroundSection from '../../global/BackgroundSection'
 
-import useAppBridge from '@/hooks/useAppBridge'
+type ButtonProps = React.ComponentProps<typeof Button>
 
 interface Props extends ButtonProps {
   imagePath: string
@@ -18,32 +16,15 @@ interface Props extends ButtonProps {
   backgroundWrapperClassName?: string
   wrapperClassName?: string
   imageClassName?: string
-  className?: string
   wrapperStyle?: React.CSSProperties
-  onClick?: (event: React.MouseEvent) => void
-  onMouseEnter?: () => void
-  children?: React.ReactNode
 }
 
 const ActButton = (props: Props) => {
-  const { imagePath, backgroundWrapperClassName, buttonText, link, appSchema, onClick, className, wrapperClassName, wrapperStyle, onMouseEnter, children, imageClassName, ...rest } = props
-  const t = useTranslations()
-  const appBridge = useAppBridge()
-  const router = useRouter();
+  const { imagePath, backgroundWrapperClassName, buttonText, link, appSchema, className, wrapperClassName, wrapperStyle, children, imageClassName, ...rest } = props
 
-  const handleClick = (event: React.MouseEvent) => {
-    if (appSchema) {
-      appBridge?.gotoWithScheme(appSchema)
-    }
-    if (link) {
-      router.replace(link)
-    }
-    onClick?.(event)
-
-  }
 
   return (
-    <BackgroundSectionAsync
+    <BackgroundSection
       imagePath={imagePath}
       imageClassName={imageClassName}
       childrenClassName={backgroundWrapperClassName}
@@ -53,12 +34,10 @@ const ActButton = (props: Props) => {
         {...rest}
         variant="link"
         className={twMerge('text-[28px] text-[#FFFFFF] font-bold w-full h-full', className)}
-        onClick={handleClick}
-        onMouseEnter={onMouseEnter}
         asChild>
-        {children || <span>{buttonText && t(buttonText)}</span>}
+        {children || <span>{buttonText}</span>}
       </Button>
-    </BackgroundSectionAsync>
+    </BackgroundSection>
   )
 }
 

@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
 import ActButton from '@/app/components/feature/ActButton'
-
 import { useLinkPrefetch } from '@/hooks/useLinkPrefetch'
+
 
 type Props = {
   buttons: { text: string, link: string }[]

@@ -1,12 +1,8 @@
 'use client'
 
-import React from 'react'
-
 import Image from 'next/image'
 
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-
-import useAppBridge from '@/hooks/useAppBridge'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export type InternalAvatarProps = {
   src: string
@@ -16,15 +12,15 @@ export type InternalAvatarProps = {
 }
 
 const InternalAvatar = ({ src, className, uid, guildId }: InternalAvatarProps) => {
-  const appBridge = useAppBridge()
   const handleClick = () => {
-    if (uid) {
-      appBridge.gotoWithScheme(`boli://user_center?uid=${uid}`)
-      return
-    }
-    if (guildId) {
-      appBridge.gotoWithScheme(`boli://guild/main?guildId=${guildId}`);
-    }
+    alert('执行')
+    // if (uid) {
+    //   appBridge.gotoWithScheme(`boli://user_center?uid=${uid}`)
+    //   return
+    // }
+    // if (guildId) {
+    //   appBridge.gotoWithScheme(`boli://guild/main?guildId=${guildId}`);
+    // }
   }
 
   return (

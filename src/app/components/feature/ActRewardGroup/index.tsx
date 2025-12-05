@@ -12,10 +12,9 @@ import InternalImage from '@/app/components/global/InternalImage';
 
 import { MoreThanThreeLayout } from './config';
 
-import type { RewardGift } from '@/services/_common/type'
-import type { LangKey } from '@/services/type';
 
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import type { RewardGift } from '@/app/lib/type';
 
 type Props = {
   rewardItemConfig: {
@@ -33,7 +32,7 @@ type Props = {
 }
 
 const RewardGroup = ({ rewards, rewardItemConfig, displayLayout }: Props) => {
-  const locale = useLocale().toLowerCase() as LangKey
+  const locale = useLocale().toLowerCase()
   const gridRef = useRef<HTMLDivElement>(null)
   const gridItemsRef = useRef<HTMLDivElement[]>([])
   const timelineRef = useRef<gsap.core.Timeline | null>(null)

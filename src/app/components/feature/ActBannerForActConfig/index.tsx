@@ -6,8 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import VideoPlayer from '@/app/components/global/VideoPlayer';
 
 import ActBannerTitle from './_components/ActBannerTitle';
-
-import type { DataConfig } from '@/services/_common/type'
+import type { DataConfig } from '@/app/lib/type';
 
 type Props = {
   dataConfig: DataConfig

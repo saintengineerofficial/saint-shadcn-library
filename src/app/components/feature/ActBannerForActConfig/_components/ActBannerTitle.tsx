@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { twMerge } from 'tailwind-merge'
+import type { DataConfigBannerTitle } from '@/app/lib/type'
 
-import type { DataConfigBannerTitle } from '@/services/_common/type'
 
 type Props = {
   titleMapImage: DataConfigBannerTitle

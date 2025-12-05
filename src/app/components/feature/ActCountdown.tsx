@@ -1,21 +1,25 @@
 'use client'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
-import { useCountDown } from 'ahooks'
+import { useCountDown, useMount } from 'ahooks'
 import { useLocale } from 'next-intl'
 import { twMerge } from 'tailwind-merge'
 
-import BackgroundSectionAsync from '@/app/components/global/BackgroundSectionAsync'
+import BackgroundSection from '@/app/components/global/BackgroundSection'
+import { useCurrentRange } from '@/hooks/useCurrentRange'
+
 
 export type CountdownProps = {
   targetDate: string | number | Date
+  startTime?: string | number | Date
   timeImagePath?: string
   countdownImagePath?: string
+  dayInterval?: number
   className?: string
   wrapperClassName?: string
   timeClassName?: string
   textClassName?: string
-  isDayText?: boolean
+  timeBoxClassName?: string
 }
 
 type TimeBoxProps = {
@@ -24,6 +28,7 @@ type TimeBoxProps = {
   imagePath?: string;
   timeClassName?: string;
   textClassName?: string;
+  timeBoxClassName?: string;
 }
 
 type TimeContentProps = {
@@ -36,26 +41,61 @@ type TimeContentProps = {
   timeClassName?: string
   textClassName?: string
   wrapperClassName?: string
+  timeBoxClassName?: string
 }
 
-const dayStrMap: Record<string, string> = {
-  'en': 'day',
-  'zh': '天',
-  'ar': 'يوم',
-  'tr': 'gün',
+const languageTimeMap: Record<string, Record<string, string>> = {
+  'zh': {
+    'days': '天',
+    'hours': '小时',
+    'minutes': '分钟',
+    'seconds': '秒',
+  },
+  'en': {
+    'days': 'Days',
+    'hours': 'Hours',
+    'minutes': 'Min',
+    'seconds': 'Sec',
+  },
+  'ar': {
+    'days': 'أيام',
+    'hours': 'ساعات',
+    'minutes': 'دقائق',
+    'seconds': 'ثوان',
+  },
+  'tr': {
+    'days': 'Gün',
+    'hours': 'Saat',
+    'minutes': 'Dakika',
+    'seconds': 'Saniye',
+  }
 }
 
-const TimeBox = ({ value, label, imagePath, timeClassName, textClassName }: TimeBoxProps) => {
+const Placeholder = ({ className, timeClassName, textClassName, wrapperClassName }: Pick<CountdownProps, 'className' | 'timeClassName' | 'textClassName' | 'wrapperClassName'>) => {
+  return (
+    <div className={twMerge('w-full flex justify-center items-center', className)}>
+      <div className={twMerge('flex items-center justify-center gap-[10px]', wrapperClassName)}>
+        <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
+        <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', textClassName)}>:</div>
+        <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
+        <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', textClassName)}>:</div>
+        <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
+        <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
+      </div>
+    </div>
+  );
+}
+
+const TimeBox = ({ value, label, imagePath, timeClassName, textClassName, timeBoxClassName }: TimeBoxProps) => {
   if (imagePath) {
     return (
-      <>
-        <BackgroundSectionAsync imagePath={imagePath} className={twMerge('w-[100px] h-[100px]', timeClassName)}>
-          {value < 10 ? `0${value}` : value}
-        </BackgroundSectionAsync>
-        {label && (
-          <div className={twMerge('text-[24px] font-bold text-[#fff]', textClassName)}>{label}</div>
-        )}
-      </>
+      <BackgroundSection
+        imagePath={imagePath}
+        className={twMerge('w-[100px] h-[100px]', timeClassName)}
+        childrenClassName={twMerge('flex-col', timeBoxClassName)}>
+        <p className='flex-none leading-tight'>{value < 10 ? `0${value}` : value}</p>
+        <div className={twMerge('flex-none text-[24px] text-[#fff]', textClassName)}>{label}</div>
+      </BackgroundSection>
     )
   }
 
@@ -70,94 +110,73 @@ const TimeBox = ({ value, label, imagePath, timeClassName, textClassName }: Time
 }
 
 const TimeContent = (props: TimeContentProps) => {
-  const { lableDays, days, hours, minutes, seconds, timeImagePath, timeClassName, textClassName, wrapperClassName } = props
+  const locale = useLocale().toLowerCase()
+  const { days, hours, minutes, seconds, timeImagePath, timeClassName, textClassName, wrapperClassName, timeBoxClassName } = props
   return (
     <div className={twMerge('flex items-center justify-center gap-[10px]', wrapperClassName)}>
       <TimeBox
         value={days}
-        label={lableDays}
+        label={languageTimeMap[locale].days}
         imagePath={timeImagePath}
         timeClassName={timeClassName}
         textClassName={textClassName}
+        timeBoxClassName={timeBoxClassName}
       />
       <TimeBox
         value={hours}
-        label=":"
+        label={languageTimeMap[locale].hours}
         imagePath={timeImagePath}
         timeClassName={timeClassName}
         textClassName={textClassName}
+        timeBoxClassName={timeBoxClassName}
       />
       <TimeBox
         value={minutes}
-        label=":"
+        label={languageTimeMap[locale].minutes}
         imagePath={timeImagePath}
         timeClassName={timeClassName}
         textClassName={textClassName}
+        timeBoxClassName={timeBoxClassName}
       />
       <TimeBox
         value={seconds}
+        label={languageTimeMap[locale].seconds}
         imagePath={timeImagePath}
         timeClassName={timeClassName}
+        textClassName={textClassName}
+        timeBoxClassName={timeBoxClassName}
       />
     </div>
   )
 }
 
-const ActCountdown = (props: CountdownProps) => {
-  const locale = useLocale()
-  const { targetDate, timeImagePath, className, timeClassName, textClassName, wrapperClassName, countdownImagePath, isDayText = true } = props
+const ActCountdownV2 = React.memo((props: CountdownProps) => {
+  const { targetDate, timeImagePath, className, timeClassName, textClassName, wrapperClassName, countdownImagePath, timeBoxClassName, startTime, dayInterval } = props
+
   const [isClient, setIsClient] = useState(false)
 
-  useEffect(() => {
+  const currentRange = useCurrentRange(Number(startTime), Number(targetDate), dayInterval)
+
+  useMount(() => {
     setIsClient(true)
-  }, [])
+  })
 
   const [, formattedRes] = useCountDown({
-    targetDate,
+    targetDate: currentRange?.end || targetDate,
   })
 
   const { days, hours, minutes, seconds } = formattedRes
 
-  const countdownDisplay = useMemo(() => {
+  // 占位符
+  if (!isClient) {
+    return <Placeholder {...props} />
+  }
 
-    if (!isClient) {
-      return (
-        <div className={twMerge('w-full flex justify-center items-center', className)}>
-          <div className={twMerge('flex items-center justify-center gap-[10px]', wrapperClassName)}>
-            {/* 占位符，保持布局稳定 */}
-            <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
-            <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', textClassName)}>:</div>
-            <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
-            <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', textClassName)}>:</div>
-            <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
-            <div className={twMerge('text-[24px] font-bold text-[#fff] opacity-0', timeClassName)}>00</div>
-          </div>
-        </div>
-      )
-    }
-
-    if (countdownImagePath) {
-      return (
-        <BackgroundSectionAsync imagePath={countdownImagePath} className={twMerge('w-full flex justify-center items-center', className)}>
-          <TimeContent
-            lableDays={isDayText ? dayStrMap[locale] : undefined}
-            days={days}
-            hours={hours}
-            minutes={minutes}
-            seconds={seconds}
-            timeImagePath={timeImagePath}
-            timeClassName={timeClassName}
-            textClassName={textClassName}
-            wrapperClassName={wrapperClassName}
-          />
-        </BackgroundSectionAsync>
-      )
-    }
-
+  // 背景图
+  if (countdownImagePath) {
     return (
-      <div className={twMerge('w-full flex justify-center items-center', className)}>
+      <BackgroundSection imagePath={countdownImagePath} className={twMerge('w-full flex justify-center items-center', className)}>
         <TimeContent
-          lableDays={isDayText ? dayStrMap[locale] : undefined}
           days={days}
           hours={hours}
           minutes={minutes}
@@ -166,13 +185,30 @@ const ActCountdown = (props: CountdownProps) => {
           timeClassName={timeClassName}
           textClassName={textClassName}
           wrapperClassName={wrapperClassName}
+          timeBoxClassName={timeBoxClassName}
         />
-      </div>
+      </BackgroundSection>
     )
-  }, [isClient, countdownImagePath, className, isDayText, locale, days, hours, minutes, seconds, timeImagePath, timeClassName, textClassName, wrapperClassName])
+  }
 
+  return (
+    <div className={twMerge('w-full flex justify-center items-center', className)}>
+      <TimeContent
+        days={days}
+        hours={hours}
+        minutes={minutes}
+        seconds={seconds}
+        timeImagePath={timeImagePath}
+        timeClassName={timeClassName}
+        textClassName={textClassName}
+        wrapperClassName={wrapperClassName}
+        timeBoxClassName={timeBoxClassName}
+      />
+    </div>
+  )
 
-  return countdownDisplay
-}
+})
 
-export default ActCountdown
+ActCountdownV2.displayName = 'ActCountdownV2'
+
+export default ActCountdownV2

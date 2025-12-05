@@ -2,16 +2,11 @@ import React, { useMemo, type PropsWithChildren } from 'react'
 
 import { twMerge } from 'tailwind-merge';
 
-import ActTopTitle from '@/app/components/feature/ActTopTitle';
 import BackgroundSection from '@/app/components/global/BackgroundSection';
 
 import { getCssWHNumber, px2vw } from '@/lib/utils';
 
 type Props = {
-  titleSection: {
-    title?: string
-    className?: string
-  }
   topSection: {
     imageUrl: string
     className: string
@@ -24,12 +19,11 @@ type Props = {
     imageUrl: string
     className: string
   }
-  isOnlyContent: boolean
   className?: string,
 }
 
 const DecorateContainer = (props: PropsWithChildren<Props>) => {
-  const { titleSection, topSection, middleSection, bottomSection, isOnlyContent, className, children } = props
+  const { topSection, middleSection, bottomSection, className, children } = props
   // 计算最小高度
   const finalMinHeight = useMemo(() => {
     const topSectionHeight = getCssWHNumber('h', topSection.className);
@@ -61,9 +55,7 @@ const DecorateContainer = (props: PropsWithChildren<Props>) => {
 
       {/* 内容层 - 覆盖在背景图层上方 */}
       <div className="relative z-10 w-full flex flex-col" style={{ minHeight: finalMinHeight }}>
-        {!isOnlyContent && <ActTopTitle className={topSection.className} title={titleSection?.title} titleClassName={titleSection?.className} />}
         {children}
-        {!isOnlyContent && (<div className={twMerge("w-full", bottomSection.className)} />)}
       </div>
     </div>
   )
