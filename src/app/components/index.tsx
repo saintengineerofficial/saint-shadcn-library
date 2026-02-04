@@ -16,6 +16,7 @@ import SpaceEntry from "./global/Spacing/entry";
 import SvgaVideoEntry from "./global/SvgaVideo/entry";
 import TransitionShadowEntry from "./global/TransitionShadow/entry";
 import VideoPlayerEntry from "./global/VideoPlayer/entry";
+import GridEntry from './global/Grid/entry'
 
 export type ComponentDemoEntry = {
   key: string;
@@ -29,11 +30,12 @@ export type ComponentDemoEntry = {
 
 export const componentDemos: ComponentDemoEntry[] = [
   BackgroundSectionEntry,
-  SvgaVideoEntry,
   InternalImageEntry,
+  SvgaVideoEntry,
+  VideoPlayerEntry,
   LazyImageEntry,
   SpaceEntry,
-  VideoPlayerEntry,
+  GridEntry,
   TransitionShadowEntry,
   DecorateAvatarEntry,
   DecorateContainerEntry,

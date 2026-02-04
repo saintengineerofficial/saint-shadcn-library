@@ -1,18 +1,23 @@
 "use client";
 
 import TransitionShadow from ".";
+import InternalImage from "../InternalImage";
 
 const Demo = () => (
-  <div className="relative h-[200px] overflow-hidden rounded-xl">
-    <img
-      src="https://images.unsplash.com/photo-1466840884200-57d479ae4b4c?w=1200&q=80&auto=format&fit=crop"
+  <div className="relative gap-2 flex overflow-hidden rounded-xl">
+    <InternalImage
+      src="/image/reward-page-top-bg.png"
       alt="cover"
-      className="h-full w-full object-cover"
+      className="h-[278px] w-[400px] object-cover"
     />
-    <TransitionShadow />
-    <div className="absolute left-4 top-4 space-y-2 text-white">
-      <p className="text-xs uppercase tracking-[0.2em]">Podcast</p>
-      <p className="text-lg font-semibold">夏日路途播放清单</p>
+    <div className='relative'>
+      <InternalImage
+        src="/image/reward-page-top-bg.png"
+        alt="cover"
+        fill
+        className="h-[278px] w-[400px] object-cover"
+      />
+      <TransitionShadow className='w-[400px]' />
     </div>
   </div>
 );

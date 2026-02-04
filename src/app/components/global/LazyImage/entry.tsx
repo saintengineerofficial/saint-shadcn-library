@@ -6,7 +6,7 @@ import Demo from "./demo";
 const entry: ComponentDemoEntry = {
   key: "lazyimage",
   title: "LazyImage",
-  description: "LazyImage 组件展示占位，待补充真实 demo。",
+  description: "LazyImage 组件展示占位 ",
   Demo,
   Doc,
   demoPath: "src/app/components/global/LazyImage/demo.tsx",

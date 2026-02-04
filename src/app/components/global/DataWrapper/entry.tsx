@@ -6,7 +6,7 @@ import Demo from "./demo";
 const entry: ComponentDemoEntry = {
   key: "datawrapper",
   title: "DataWrapper",
-  description: "DataWrapper 组件展示占位，待补充真实 demo。",
+  description: "DataWrapper 组件展示占位 ",
   Demo,
   Doc,
   demoPath: "src/app/components/global/DataWrapper/demo.tsx",

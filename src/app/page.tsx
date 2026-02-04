@@ -50,8 +50,9 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans">
       <aside className="sticky top-0 flex h-screen w-72 flex-col gap-1 border-r border-slate-200 bg-white p-6">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2">
           <span className="text-xl font-bold uppercase tracking-[0.2em] text-black">Saint Component List</span>
+          <span className="text-sm tracking-[0.2em] text-blue-300">This is a secondary encapsulation of Radix UI and Next</span>
         </div>
         <div className="mt-6 space-y-1 max-h-[calc(100vh-140px)] overflow-y-auto pr-1">
           {componentDemos.map((item) => (
