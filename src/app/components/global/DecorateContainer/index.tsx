@@ -2,11 +2,14 @@ import React, { useMemo, type PropsWithChildren } from 'react'
 
 import { twMerge } from 'tailwind-merge';
 
-import BackgroundSection from '@/app/components/global/BackgroundSection';
-
-import { getCssWHNumber, px2vw } from '@/lib/utils';
+import { getCssWHNumber, px2vw } from '@/lib/format-util';
+import BackgroundSection from '../BackgroundSection';
 
 type Props = {
+  titleSection: {
+    title?: string
+    className?: string
+  }
   topSection: {
     imageUrl: string
     className: string
@@ -19,6 +22,7 @@ type Props = {
     imageUrl: string
     className: string
   }
+  isOnlyContent: boolean
   className?: string,
 }
 
@@ -44,12 +48,12 @@ const DecorateContainer = (props: PropsWithChildren<Props>) => {
         <BackgroundSection
           imagePath={middleSection.imageUrl}
           mode="bgRepeatY"
-          className={twMerge('flex-1 -mt-px', middleSection.className)}
+          className={twMerge('flex-1 mt-[-1px]', middleSection.className)}
         />
 
         <BackgroundSection
           imagePath={bottomSection.imageUrl}
-          className={twMerge('-mt-px', bottomSection.className)}
+          className={twMerge('mt-[-1px]', bottomSection.className)}
         />
       </div>
 

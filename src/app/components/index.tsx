@@ -4,10 +4,13 @@ import BackgroundSectionEntry from "./global/BackgroundSection/entry";
 import BaseDialogEntry from "./global/BaseDialog/entry";
 import DataEmptyErrorEntry from "./global/DataEmptyError/entry";
 import DataWrapperEntry from "./global/DataWrapper/entry";
+import DecorateAvatarEntry from "./global/DecorateAvatar/entry";
+import DecorateContainerEntry from "./global/DecorateContainer/entry";
 import GradientBoxEntry from "./global/GradientBox/entry";
 import InfiniteListEntry from "./global/InfiniteList/entry";
 import InternalImageEntry from "./global/InternalImage/entry";
 import LazyImageEntry from "./global/LazyImage/entry";
+import MarqueeEntry from "./global/Marquee/entry";
 import RouterWrapperEntry from "./global/RouterWrapper/entry";
 import SpaceEntry from "./global/Spacing/entry";
 import SvgaVideoEntry from "./global/SvgaVideo/entry";
@@ -32,11 +35,14 @@ export const componentDemos: ComponentDemoEntry[] = [
   SpaceEntry,
   VideoPlayerEntry,
   TransitionShadowEntry,
+  DecorateAvatarEntry,
+  DecorateContainerEntry,
   GradientBoxEntry,
   RouterWrapperEntry,
   InfiniteListEntry,
+  MarqueeEntry,
+  BaseDialogEntry,
 
-  // BaseDialogEntry,
   // DataEmptyErrorEntry,
   // DataWrapperEntry,
 ];
