@@ -82,11 +82,11 @@ const SvgaVideo = forwardRef<SvgaVideoRef, SvgaVideoProps>((props, ref) => {
         playerRef.current = null
       }
     }
-  }, [props, props.onReady, props.url])
+  }, [props.onReady, props.url])
 
 
   return (
-    <canvas ref={canvasRef} className={twMerge('w-screen h-[1220px] object-cover inset-0 z-40', props.className)} />
+    <canvas ref={canvasRef} className={twMerge('object-contain', props.className)} />
   )
 })
 

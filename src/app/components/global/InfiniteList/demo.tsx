@@ -19,7 +19,7 @@ const Demo = () => {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-slate-600">向下滚动至底部触发 loadMore，加载两页后停止。</p>
+      <p className="text-sm text-slate-600">向下滚动至底部触发 loadMore</p>
       <div className="h-[260px] overflow-auto rounded-lg border border-slate-200 p-3">
         <InfiniteList hasMore={hasMore} loadMore={loadMore}>
           <div className="grid grid-cols-3 gap-3">

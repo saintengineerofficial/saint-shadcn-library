@@ -1,21 +1,34 @@
 'use client'
-import React, { useEffect, type PropsWithChildren } from 'react'
+import React, { useEffect, useMemo, type PropsWithChildren } from 'react'
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-
+import { } from '@/lib/utils';
+import { appendQueryString } from './utils';
 export interface RouterWrapperProps {
   link?: string
   back?: boolean
   replace?: boolean
   prefetch?: boolean
   refresh?: boolean  // 是否在导航后刷新 Server Components
+  scrollOffset?: number  // 跳转后滚动的距离(px),正数向下滚动
   className?: string
   onClick?: () => void | boolean
 }
 
-const RouterWrapper = ({ children, className, link, back = false, replace = false, prefetch = true, refresh = false, onClick }: PropsWithChildren<RouterWrapperProps>) => {
+
+const RouterWrapper = (props: PropsWithChildren<RouterWrapperProps>) => {
+  const { children, className, link, back = false, replace = false, prefetch = true, refresh = false, scrollOffset, onClick } = props
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const uParam = searchParams.get('u')
+
+  const targetLink = useMemo(() => {
+    if (!link) return null
+    return appendQueryString(link, uParam)
+  }, [link, uParam])
+
   const handleClick = () => {
     const shouldContinue = onClick?.()
 
@@ -28,12 +41,18 @@ const RouterWrapper = ({ children, className, link, back = false, replace = fals
       router.back();
       return
     }
-    if (link && replace) {
-      router.replace(link);
+    if (targetLink && replace) {
+      router.replace(targetLink);
       return
     }
-    if (link) {
-      router.push(link);
+    if (targetLink) {
+      router.push(targetLink);
+      if (scrollOffset) {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: scrollOffset, behavior: "smooth" });
+        });
+
+      }
       if (refresh) {
         router.refresh();
       }
@@ -42,10 +61,10 @@ const RouterWrapper = ({ children, className, link, back = false, replace = fals
   }
 
   useEffect(() => {
-    if (link && prefetch) {
-      router.prefetch(link)
+    if (targetLink && prefetch) {
+      router.prefetch(targetLink)
     }
-  }, [link, prefetch, router])
+  }, [targetLink, prefetch, router])
 
   return (
     <div className={className} onClick={handleClick}>{children}</div>

@@ -1,25 +1,24 @@
 import BackgroundSection from ".";
 
 export const BackgroundSectionDemo = () => (
-  <div className="space-y-4">
+  <div className="space-y-4 flex flex-col items-center">
     <BackgroundSection
-      imagePath="/next.svg"
-      className="h-[200px]"
-      childrenClassName="flex items-center justify-center"
+      imagePath="/image/list-bg-03.png"
+      className="w-[750px] h-[143px]"
+      childrenClassName='text-white flex-col'
     >
-      <div className="rounded-lg bg-white/80 px-6 py-4 text-sm text-slate-900 shadow-sm">
-        背景填充示例
-      </div>
+      <p>背景填充示例</p>
+      <span>demo</span>
+      <span>demo</span>
     </BackgroundSection>
-    <BackgroundSection
-      mode="bgRepeatX"
-      imagePath="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80"
-      className="h-[160px]"
-      childrenClassName="flex items-center justify-center"
-    >
-      <div className="rounded-lg bg-white/80 px-6 py-3 text-sm text-slate-900 shadow-sm">
-        横向平铺示例
-      </div>
-    </BackgroundSection>
+
+    <div className='w-[282px] h-[32px] overflow-hidden'>
+      <BackgroundSection imagePath='/image/progress-bg.png' className='w-[282px] h-[32px]'
+        childrenClassName='px-[5px] justify-start'>
+        <BackgroundSection mode='bgRepeatX' imagePath='/image/progress-item.png'
+          className='rounded-full w-[100px] h-[24px]' style={{ width: '100px' }} />
+        <span className='text-white text-[20px] absolute right-[5px]'>0/100</span>
+      </BackgroundSection>
+    </div>
   </div>
 );

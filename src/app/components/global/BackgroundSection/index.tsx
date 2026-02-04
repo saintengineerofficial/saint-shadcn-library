@@ -3,6 +3,7 @@ import { forwardRef, type PropsWithChildren } from 'react';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 
+
 export type BackgroundSectionProps = {
   imagePath: string;
   mode?: 'imageFill' | 'bgRepeatY' | 'bgRepeatX';
@@ -12,21 +13,22 @@ export type BackgroundSectionProps = {
   overlayClassName?: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
 const BackgroundSection = forwardRef<HTMLDivElement, PropsWithChildren<BackgroundSectionProps>>((props, ref) => {
 
-  const { overlayClassName, childrenClassName, mode, className, imagePath, children, style, imageClassName } = props
+  const { overlayClassName, childrenClassName, mode, className, imagePath, children, style, imageClassName, onClick } = props
 
   if (mode === 'bgRepeatY' || mode === 'bgRepeatX') {
     const finalStyle = {
       ...style,
       backgroundRepeat: mode === 'bgRepeatY' ? 'repeat-y' : 'repeat-x',
-      backgroundSize: mode === 'bgRepeatY' ? '100% 100%' : 'auto 100%',
+      backgroundSize: mode === 'bgRepeatY' ? '100% auto' : 'auto 100%',
     }
 
     return (
-      <div ref={ref} className={twMerge(`relative w-full overflow-hidden`, className)} style={style}>
+      <div ref={ref} className={twMerge(`relative w-full overflow-hidden`, className)} style={style} onClick={onClick}>
         <div
           className="absolute inset-0 w-full h-full"
           style={{
@@ -47,7 +49,7 @@ const BackgroundSection = forwardRef<HTMLDivElement, PropsWithChildren<Backgroun
   }
 
   return (
-    <div ref={ref} className={twMerge(`relative w-full overflow-hidden`, className)} style={style}>
+    <div ref={ref} className={twMerge(`relative w-full overflow-hidden`, className)} style={style} onClick={onClick}>
       <Image
         src={imagePath}
         alt="background"
@@ -57,7 +59,7 @@ const BackgroundSection = forwardRef<HTMLDivElement, PropsWithChildren<Backgroun
       />
 
       {overlayClassName && <div className={twMerge(`absolute inset-0`, overlayClassName)} />}
-
+      {/* {shadowClassName && <TransitionShadow className={shadowClassName} />} */}
 
       {children && (
         <div className={twMerge(`relative z-10 w-full h-full flex items-center justify-center`, childrenClassName)}>

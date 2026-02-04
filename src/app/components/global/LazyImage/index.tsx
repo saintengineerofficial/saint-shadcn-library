@@ -11,8 +11,8 @@ type ImageProps = React.ComponentProps<typeof Image>;
 export interface LazyImageProps extends Omit<ImageProps, 'loading'> {
   src: string;
   alt: string;
+  root?: React.RefObject<Element | Document | null>;
   loading?: string;
-  lazy?: boolean;
   className?: string;
 }
 
@@ -20,18 +20,18 @@ const base64 = 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA
 
 const LazyImage = forwardRef<HTMLDivElement, LazyImageProps>((props, ref) => {
 
-  const { src = base64, className, alt = '', loading = base64, lazy = false, ...rest } = props
+  const { src = base64, className, alt = '', root = null, loading = base64, ...rest } = props
 
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  const observerRef = useIntersectionObserver(imgRef, { freezeOnceVisible: true });
+  const observerRef = useIntersectionObserver(imgRef, { freezeOnceVisible: true, root: root?.current });
 
   return (
     <div ref={ref} className={twMerge('relative', className)}>
       <Image
         className='w-full h-full object-contain'
         ref={imgRef}
-        src={observerRef?.isIntersecting || !lazy ? src : loading}
+        src={observerRef?.isIntersecting ? src : loading}
         alt={alt}
         draggable={false}
         fill

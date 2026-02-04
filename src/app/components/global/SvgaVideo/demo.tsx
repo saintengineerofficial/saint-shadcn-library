@@ -16,7 +16,7 @@ const Demo = () => {
           ref={ref}
           url="https://cdn.jsdelivr.net/gh/yyued/SVGA-Samples@master/angel.svga"
           className="h-[220px] w-full"
-          options={{ loop: 0 }}
+          options={{ loop: true }}
           onReady={() => setReady(true)}
         />
       </div>
@@ -25,7 +25,7 @@ const Demo = () => {
         disabled={!ready}
         onClick={() => ref.current?.play()}
       >
-        {ready ? "播放一遍" : "加载中..."}
+        {ready ? "播放" : "加载中..."}
       </button>
       <p className="text-xs text-slate-500">
         组件内部使用 DB 缓存 + IntersectionObserver，可复用在列表或首页动画。
