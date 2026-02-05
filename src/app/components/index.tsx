@@ -2,8 +2,6 @@ import type React from "react";
 
 import BackgroundSectionEntry from "./global/BackgroundSection/entry";
 import BaseDialogEntry from "./global/BaseDialog/entry";
-import DataEmptyErrorEntry from "./global/DataEmptyError/entry";
-import DataWrapperEntry from "./global/DataWrapper/entry";
 import DecorateAvatarEntry from "./global/DecorateAvatar/entry";
 import DecorateContainerEntry from "./global/DecorateContainer/entry";
 import GradientBoxEntry from "./global/GradientBox/entry";
@@ -44,7 +42,5 @@ export const componentDemos: ComponentDemoEntry[] = [
   InfiniteListEntry,
   MarqueeEntry,
   BaseDialogEntry,
-
-  // DataEmptyErrorEntry,
-  // DataWrapperEntry,
 ];
+
